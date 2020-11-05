@@ -1,0 +1,21 @@
+{
+  "name": "c19frbot",
+  "version": "1.0.0",
+  "description": "Bot Telegram pour générer l'attestation de déplacement (FR)",
+  "main": "index.js",
+  "scripts": {
+    "start": "npm install && node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vonKrafft/Telegram-C19-FR-Bot"
+  },
+  "author": "wandrille@vonkrafft.fr",
+  "license": "GPL-3.0",
+  "dependencies": {
+    "pdf-lib": "^1.11.2",
+    "qrcode": "^1.4.4",
+    "telegraf": "^3.38.0"
+  }
+}

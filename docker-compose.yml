@@ -1,0 +1,16 @@
+version: '3'
+
+services:
+    telegram-bot:
+        image: node:alpine
+        container_name: telegram-bot
+        user: node
+        working_dir: /home/node/app
+        volumes:
+            - ./:/home/node/app
+        environment:
+            NODE_ENV: "production"
+            BOT_TOKEN: "0123456789:ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789"
+            WHITELIST: ""
+        command: "npm start"
+        restart: unless-stopped
