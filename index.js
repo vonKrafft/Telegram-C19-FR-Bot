@@ -19,7 +19,7 @@ const Extra = require('telegraf/extra');
 const session = require('telegraf/session');
 
 const QRCode = require('qrcode');
-const { PDFDocument, StandardFonts } = require('pdf-lib');
+const { PDFDocument, rgb, StandardFonts } = require('pdf-lib');
 const fs = require('fs');
 
 const whiteList = process.env.WHITELIST.split(',').map(parseFloat);
@@ -42,7 +42,7 @@ const handleAttestationCommand = (ctx) => {
             '\n```\nPourquoi as-tu besoin de sortir ?', 
             Extra.markdown().markup((m) => m.inlineKeyboard([
                 m.callbackButton('💼 Travail', 'Covid_travail'),
-                m.callbackButton('🛒 Courses', 'Covid_achats'),
+                m.callbackButton('🥖 Courses / Culte', 'Covid_achats_culte'),
                 m.callbackButton('👨‍⚕ Médecin', 'Covid_sante'),
                 m.callbackButton('👪 Famille', 'Covid_famille'),
                 m.callbackButton('♿ Handicap', 'Covid_handicap'),
@@ -221,15 +221,15 @@ const handleSettingsCommand = (ctx) => {
  *****************************************************************************/
 
 const attestationCategory = {
-    travail:       { padding: 578, label: '💼 Travail' },
-    achats:        { padding: 533, label: '🛒 Courses' },
-    sante:         { padding: 477, label: '👨‍⚕ Médecin' },
-    famille:       { padding: 435, label: '👪 Famille' },
-    handicap:      { padding: 396, label: '♿ Handicap' },
-    sport_animaux: { padding: 358, label: '🚶 Sport' },
-    convocation:   { padding: 295, label: '📜 Convocation' },
-    missions:      { padding: 255, label: '📝 Missions' },
-    enfants:       { padding: 211, label: '🚸 École' }
+    travail:       { padding: 553, label: '💼 Travail' },
+    achats_culte:  { padding: 482, label: '🥖 Courses / Culte' },
+    sante:         { padding: 434, label: '👨‍⚕ Médecin' },
+    famille:       { padding: 410, label: '👪 Famille' },
+    handicap:      { padding: 373, label: '♿ Handicap' },
+    sport_animaux: { padding: 349, label: '🚶 Sport' },
+    convocation:   { padding: 276, label: '📜 Convocation' },
+    missions:      { padding: 252, label: '📝 Missions' },
+    enfants:       { padding: 228, label: '🚸 École' }
 };
 
 const isAccessRestricted = (uid) => {
@@ -319,7 +319,7 @@ const generatePDF = async (profile, reason) => {
         `Motifs: ${reason}`,
     ].join(';\n ')
 
-    const pdfBase = `${__dirname}/data/certificate.1e3570bc.pdf`;
+    const pdfBase = `${__dirname}/data/certificate.0eed39bb.pdf`;
     const pdfSrcBytes = fs.readFileSync(`${pdfBase}`);
 
     const pdfDoc = await PDFDocument.load(pdfSrcBytes);
@@ -333,9 +333,9 @@ const generatePDF = async (profile, reason) => {
     pdfDoc.setCreator('');
     pdfDoc.setAuthor("Ministère de l'intérieur");
 
-    pdfDoc.addPage()
-    const page2 = pdfDoc.getPages()[1]
+    pdfDoc.addPage();
     const page1 = pdfDoc.getPages()[0];
+    const page2 = pdfDoc.getPages()[1];
 
     const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
 
@@ -343,30 +343,42 @@ const generatePDF = async (profile, reason) => {
         page1.drawText(text, { x, y, size, font });
     }
 
-    drawText(`${firstname} ${lastname}`, 119, 696);
-    drawText(birthday, 119, 674);
-    drawText(placeofbirth, 297, 674);
-    drawText(`${address} ${zipcode} ${city}`, 133, 652);
+    drawText(`${firstname} ${lastname}`, 92, 702);
+    drawText(birthday, 92, 684);
+    drawText(placeofbirth, 214, 684);
+    drawText(`${address} ${zipcode} ${city}`, 104, 665);
 
-    drawText('x', 78, attestationCategory[reason].padding, 18);
+    drawText('x', 47, attestationCategory[reason].padding, 12);
 
-    drawText(city, 105, 177, 11);
-    drawText(`${datesortie}`, 91, 153, 11);
-    drawText(`${heuresortie}`, 264, 153, 11);
+    drawText(city, 78, 76, 11);
+    drawText(`${datesortie}`, 63, 58, 11);
+    drawText(`${heuresortie}`, 227, 58, 11);
+
+    const qrTitle1 = 'QR-code contenant les informations ';
+    const qrTitle2 = 'de votre attestation numérique';
 
     const generatedQR = await generateQR(data);
     const generatedQRImage = await pdfDoc.embedPng(generatedQR);
 
+    page1.drawText(qrTitle1 + '\n' + qrTitle2, { 
+        x: 440,
+        y: 130,
+        size: 6,
+        font,
+        lineHeight: 10,
+        color: rgb(0, 0, 0)
+    });
+
     page1.drawImage(generatedQRImage, {
         x: page1.getWidth() - 156,
-        y: 100,
+        y: 25,
         width: 92,
         height: 92,
     });
 
     page2.drawImage(generatedQRImage, {
         x: 50,
-        y: page2.getHeight() - 350,
+        y: page2.getHeight() - 390,
         width: 300,
         height: 300,
     });
