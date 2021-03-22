@@ -1,15 +1,15 @@
 # Bot Telegram générateur de certificat de déplacement
 
-**C19-FR-Bot** est un Bot Telegram permettant de générer l'attestation de déplacement requise en période de confinement en France.
+**C19-FR-Bot** est un Bot Telegram permettant de générer l'attestation de déplacement requise en période de confinement et couvre-feu en France.
 
 Il est basé sur le projet officiel de générateur de certificat de déplacement :
 
-- https://github.com/LAB-MI/attestation-deplacement-derogatoire-q4-2020
-- https://media.interieur.gouv.fr/deplacement-covid-19/
+- https://github.com/LAB-MI/attestation-deplacement-derogatoire-covid-19
+- https://media.interieur.gouv.fr/attestation-deplacement-derogatoire-covid-19/
 
 ## Installation
 
-Vous pouvez héberger le service vous-même. Pour cela, il vous faut d'abord créer un _bot_ Telegram en envoyant simplement un message à [@BotFather](https://core.telegram.org/bots#6-botfather).
+Vous devez héberger le service vous-même. Pour cela, il vous faut d'abord créer un _bot_ Telegram en envoyant simplement un message à [@BotFather](https://core.telegram.org/bots#6-botfather).
 
 En créant un bot, @BotFather vous donnera un jeton qui est nécessaire pour autoriser le _bot_ et envoyer des requêtes à l'[API](https://core.telegram.org/bots/api) Telegram. Gardez votre jeton et stockez-le en toute sécurité, il peut être utilisé par n'importe qui pour contrôler votre _bot_.
 

@@ -42,14 +42,17 @@ const handleAttestationCommand = (ctx) => {
             '\n```\nPourquoi as-tu besoin de sortir ?', 
             Extra.markdown().markup((m) => m.inlineKeyboard([
                 m.callbackButton('💼 Travail', 'Covid_travail'),
-                m.callbackButton('🥖 Courses / Culte', 'Covid_achats_culte'),
                 m.callbackButton('👨‍⚕ Médecin', 'Covid_sante'),
                 m.callbackButton('👪 Famille', 'Covid_famille'),
                 m.callbackButton('♿ Handicap', 'Covid_handicap'),
-                m.callbackButton('🚶 Sport', 'Covid_sport_animaux'),
-                m.callbackButton('📜 Convocation', 'Covid_convocation'),
+                m.callbackButton('👨‍⚖ Judiciaire', 'Covid_judiciaire'),
                 m.callbackButton('📝 Missions', 'Covid_missions'),
-                m.callbackButton('🚸 École', 'Covid_enfants')
+                m.callbackButton('🚉 Transport', 'Covid_transit'),
+                m.callbackButton('🐈 Animaux', 'Covid_animaux'),
+                m.callbackButton('🛒 Courses', 'Covid_courses'),
+                m.callbackButton('🚶 Sport', 'Covid_sport'),
+                m.callbackButton('⛪ Culte', 'Covid_rassemblement'),
+                m.callbackButton('📜 Administratif', 'Covid_demarche')
             ], {columns: 3}))
         );
     } else {
@@ -221,15 +224,18 @@ const handleSettingsCommand = (ctx) => {
  *****************************************************************************/
 
 const attestationCategory = {
-    travail:       { padding: 553, label: '💼 Travail' },
-    achats_culte:  { padding: 482, label: '🥖 Courses / Culte' },
-    sante:         { padding: 434, label: '👨‍⚕ Médecin' },
-    famille:       { padding: 410, label: '👪 Famille' },
-    handicap:      { padding: 373, label: '♿ Handicap' },
-    sport_animaux: { padding: 349, label: '🚶 Sport' },
-    convocation:   { padding: 276, label: '📜 Convocation' },
-    missions:      { padding: 252, label: '📝 Missions' },
-    enfants:       { padding: 228, label: '🚸 École' }
+    travail:       { padding: 579, label: '💼 Travail' },
+    sante:         { padding: 546, label: '👨‍⚕ Médecin' },
+    famille:       { padding: 512, label: '👪 Famille' },
+    handicap:      { padding: 478, label: '♿ Handicap' },
+    judiciaire:    { padding: 459, label: '👨‍⚖ Judiciaire' },
+    missions:      { padding: 438, label: '📝 Missions' },
+    transit:       { padding: 404, label: '🚉 Transport' },
+    animaux:       { padding: 370, label: '🐈 Animaux' },
+    courses:       { padding: 304, label: '🛒 Courses' },
+    sport:         { padding: 261, label: '🚶 Sport' },
+    rassemblement: { padding: 190, label: '⛪ Culte' },
+    demarche:      { padding: 145, label: '📜 Administratif' }
 };
 
 const isAccessRestricted = (uid) => {
@@ -319,7 +325,7 @@ const generatePDF = async (profile, reason) => {
         `Motifs: ${reason}`,
     ].join(';\n ')
 
-    const pdfBase = `${__dirname}/data/certificate.0eed39bb.pdf`;
+    const pdfBase = `${__dirname}/data/certificate.c027625.pdf`;
     const pdfSrcBytes = fs.readFileSync(`${pdfBase}`);
 
     const pdfDoc = await PDFDocument.load(pdfSrcBytes);
@@ -343,16 +349,16 @@ const generatePDF = async (profile, reason) => {
         page1.drawText(text, { x, y, size, font });
     }
 
-    drawText(`${firstname} ${lastname}`, 92, 702);
-    drawText(birthday, 92, 684);
-    drawText(placeofbirth, 214, 684);
-    drawText(`${address} ${zipcode} ${city}`, 104, 665);
+    drawText(`${firstname} ${lastname}`, 144, 705);
+    drawText(birthday, 144, 684);
+    drawText(placeofbirth, 310, 684);
+    drawText(`${address} ${zipcode} ${city}`, 148, 665);
 
-    drawText('x', 47, attestationCategory[reason].padding, 12);
+    drawText('x', 72, attestationCategory[reason].padding, 12);
 
-    drawText(city, 78, 76, 11);
-    drawText(`${datesortie}`, 63, 58, 11);
-    drawText(`${heuresortie}`, 227, 58, 11);
+    drawText(city, 103, 112, 11);
+    drawText(`${datesortie}`, 91, 95, 11);
+    drawText(`${heuresortie}`, 310, 95, 11);
 
     const qrTitle1 = 'QR-code contenant les informations ';
     const qrTitle2 = 'de votre attestation numérique';
@@ -362,7 +368,7 @@ const generatePDF = async (profile, reason) => {
 
     page1.drawText(qrTitle1 + '\n' + qrTitle2, { 
         x: 440,
-        y: 130,
+        y: 630,
         size: 6,
         font,
         lineHeight: 10,
@@ -370,10 +376,10 @@ const generatePDF = async (profile, reason) => {
     });
 
     page1.drawImage(generatedQRImage, {
-        x: page1.getWidth() - 156,
-        y: 25,
-        width: 92,
-        height: 92,
+        x: page1.getWidth() - 107,
+        y: 660,
+        width: 82,
+        height: 82,
     });
 
     page2.drawImage(generatedQRImage, {
