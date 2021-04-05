@@ -7,6 +7,8 @@ Il est basé sur le projet officiel de générateur de certificat de déplacemen
 - https://github.com/LAB-MI/attestation-deplacement-derogatoire-covid-19
 - https://media.interieur.gouv.fr/attestation-deplacement-derogatoire-covid-19/
 
+> Le bot est à jour d'après la v2.4.1 du 23 mars 2021
+
 ## Installation
 
 Vous devez héberger le service vous-même. Pour cela, il vous faut d'abord créer un _bot_ Telegram en envoyant simplement un message à [@BotFather](https://core.telegram.org/bots#6-botfather).
@@ -34,9 +36,10 @@ En plus des commandes natives de Telegram (`/start`, `/help` et `/settings`), le
     - `/nom <Prénom> <NOM>` ;
     - `/naissance <JJ/MM/AAAA> <Ville>` ;
     - `/adresse <Rue>, <CP> <Ville>` ;
--  Génération de l'attestation de déplacement Covid19 : `/attestation`.
+-  Génération de l'attestation de déplacement Covid19 entre 6h et 19h: `/attestation`.
+-  Génération de l'attestation de déplacement Covid19 entre 19h et 6h: `/couvrefeu`.
 
-Une fois les informations renseignées, le _bot_ gardera en mémoire pour chaque compte Telegram le nom, la date de naissance et l'adresse. L'utilisateur aura simplement besoin d'utiliser la commande `/attestation` et sélectionner son motif de sortie pour obtenir une attestation.
+Une fois les informations renseignées, le _bot_ gardera en mémoire pour chaque compte Telegram le nom, la date de naissance et l'adresse. L'utilisateur aura simplement besoin d'utiliser les commandes `/attestation` ou `/couvrefeu` et sélectionner son motif de sortie pour obtenir une attestation.
 
 ![Aperçu du chat Telegram avec le bot](./preview.png)
 
